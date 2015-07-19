@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Mon Jan 02 21:28:27 KST 2012-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.samsungosp.app.verify.dao.VerifyToComapreTableDAO">
+<sql id="getSelect">
+SELECT 
+	 GUIDE_ID AS sampleId
+    ,GUIDE_NAME AS sampleName 
+  FROM GUIDE    
+</sql>
+</mapper>

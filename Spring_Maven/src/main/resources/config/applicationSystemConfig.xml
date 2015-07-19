@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+
+    <comment>Content Default Configuration</comment>
+    
+    <entry key="config.sample">LOCAL.ApplicationSystemConfig</entry>
+    
+    <!-- ======================================== -->
+    <!--             ETC Configuration            -->
+    <!-- ======================================== -->   
+    
+    <!-- property reload time(sec) -->     
+    <entry key="outproperty.reload.second">5</entry> 
+        
+    <!-- ======================================== -->
+    <!--          MYSQL JDBC Configuration        -->
+    <!-- ======================================== -->
+    <entry key="mysql.jdbc.driverClassName">com.mysql.jdbc.Driver</entry>
+    <entry key="mysql.jdbc.url">jdbc:mysql://192.168.1.7:3306/MYPOC</entry>
+    <entry key="mysql.jdbc.username">calvin</entry>
+    <entry key="mysql.jdbc.password">!dlatl00</entry>    
+    
+    <!-- ======================================== -->
+    <!--         ORACLE JDBC Configuration        -->
+    <!-- ======================================== -->    
+    <entry key="oracle.jdbc.driverClassName">oracle.jdbc.driver.OracleDriver</entry>
+    <!--entry key="oracle.jdbc.driverClassName">core.log.jdbc.driver.OracleDriver</entry-->
+    <entry key="oracle.jdbc.url">jdbc:oracle:thin:@192.168.1.7:1521:ORAPOC</entry>
+    <entry key="oracle.jdbc.username">calvin</entry>
+    <entry key="oracle.jdbc.password">!dlatl00</entry>
+
+</properties>

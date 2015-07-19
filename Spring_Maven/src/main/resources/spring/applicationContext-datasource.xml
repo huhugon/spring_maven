@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util">
+	
+    <!-- MySQL DB POOL datasource -->
+    <bean id="mysqlDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${mysql.jdbc.driverClassName}" />
+        <property name="url" value="${mysql.jdbc.url}" />
+        <property name="username" value="${mysql.jdbc.username}" />
+        <property name="password" value="${mysql.jdbc.password}" />
+        <property name="initialSize" value="10"/>
+        <property name="maxActive" value="30"/>
+	    <property name="maxIdle" value="15" />
+	    <property name="minIdle" value="15" />
+	    <property name="testOnBorrow" value="false" />
+	    <property name="validationQuery" value="select 1" />
+	    <property name="timeBetweenEvictionRunsMillis" value="10000" />
+	    <property name="testWhileIdle" value="true" />  
+	    <property name="numTestsPerEvictionRun" value="3" />        
+	    <property name="minEvictableIdleTimeMillis" value="-1" />
+    </bean>
+    
+    <!-- define the SqlSessionFactory -->
+    <bean id="mysqlSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="mysqlDataSource" />
+        <property name="typeAliasesPackage" value="com.samsungosp" />
+        <property name="configLocation" value="classpath:config/mybatisConfig.xml"/>
+        <property name="mapperLocations" value="classpath*:com/samsungosp/**/sql/*.xml" />
+    </bean>
+    
+    <bean id="mysqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="mysqlSqlSessionFactory"/>
+    </bean>
+    
+    <!-- transaction manager, use JtaTransactionManager for global tx -->
+    <bean id="mysqlTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="mysqlDataSource" />
+    </bean>
+
+    <bean class="org.springframework.transaction.aspectj.AnnotationTransactionAspect" factory-method="aspectOf" lazy-init="false"> 
+        <property name="transactionManager" ref="mysqlTransactionManager"/> 
+    </bean>
+
+    <tx:annotation-driven transaction-manager="mysqlTransactionManager"/>
+    
+    
+    <!-- ORACLE DB POOL datasource -->
+    <bean id="oracleDataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+        <property name="connectionCachingEnabled" value="true" />   
+        <property name="URL" value="${oracle.jdbc.url}" />
+        <property name="user" value="${oracle.jdbc.username}" />
+        <property name="password" value="${oracle.jdbc.password}" />        
+        <property name="connectionCacheProperties">
+            <value>  
+                MinLimit:10
+                MaxLimit:30
+                InitialLimit:1
+                ConnectionWaitTimeout:120
+                InactivityTimeout:180
+                ValidateConnection:true
+            </value>
+        </property>
+    </bean>
+    
+    <!-- define the SqlSessionFactory -->
+    <bean id="oracleSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="oracleDataSource" />
+        <property name="typeAliasesPackage" value="com.samsungosp" />
+        <property name="configLocation" value="classpath:config/mybatisConfig.xml"/>
+        <property name="mapperLocations" value="classpath*:com/samsungosp/**/sql/*.xml" />
+    </bean>
+    
+    <bean id="oracleSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="mysqlSqlSessionFactory"/>
+    </bean>
+    
+    <!-- transaction manager, use JtaTransactionManager for global tx -->
+    <bean id="oracleTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="mysqlDataSource" />
+    </bean>
+
+    <bean class="org.springframework.transaction.aspectj.AnnotationTransactionAspect" factory-method="aspectOf" lazy-init="false"> 
+        <property name="transactionManager" ref="oracleTransactionManager"/> 
+    </bean>
+
+    <tx:annotation-driven transaction-manager="oracleTransactionManager"/>  
+     
+    
+</beans>	
